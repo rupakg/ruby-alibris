@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Alibris::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Rupak Ganguly"]
-  s.date        = %q{2011-04-20}
+  s.date        = %q{2011-04-27}
   s.email       = ["rupakg@gmail.com"]
   s.homepage    = %q{http://github.com/rupakg/ruby-alibris}
   s.summary     = %q{Wrapper for Alibris API}
