@@ -8,8 +8,6 @@ module Alibris
     base_uri 'api.alibris.com/v1/public/search/'
     format :json
 
-    # Url: http://api.alibris.com/v1/public/search?outputtype=json&apikey=<key>&wquery=kids
-
     def initialize(options = {})
       @api_key = options[:api_key]           # required
       @output_type = options[:output_type]   # optional, valid values ['json', 'xml'], defaults to xml
