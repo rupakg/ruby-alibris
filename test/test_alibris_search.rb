@@ -247,10 +247,31 @@ class TestAlibrisSearch < Test::Unit::TestCase
         end
       end
       context "by author" do
-        setup do
-          stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wauth=Dan%20Brown", "search_books_by_wauth.json"
-          @results = @search.books_by_author("Dan Brown")
+        context "sorted by rating/price (default)" do
+          setup do
+            stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wauth=Dan%20Brown", "search_books_by_wauth.json"
+            @results = @search.books_by_author("Dan Brown")
+          end
+          should "return success" do
+            @results.message.should eql("Success")
+            @results.status.should eql("0")
+          end
+          should "return atleast one work" do
+            @results.work.size.should >= 1
+          end
+          should "not return more than #{@default_chunk} works" do
+            @results.work.size.should_not > @default_chunk
+          end
+          should "include the parameter in the author" do
+            @results.work.first.author.should include("Dan", "Brown")
+          end
         end
+        context "sorted by title: " do
+        setup do
+          stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wauth=Dan%20Brown&qsort=t", "search_books_by_wauth.json"
+          @results = @search.books_by_author("Dan Brown", {:qsort => 't'})
+        end
+
         should "return success" do
           @results.message.should eql("Success")
           @results.status.should eql("0")
@@ -261,9 +282,30 @@ class TestAlibrisSearch < Test::Unit::TestCase
         should "not return more than #{@default_chunk} works" do
           @results.work.size.should_not > @default_chunk
         end
-        should "include the parameter in the author" do
+        should "include the parameter in the basic" do
           @results.work.first.author.should include("Dan", "Brown")
         end
+      end
+        context "sorted by title in reverse: " do
+        setup do
+          stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wauth=Dan%20Brown&qsort=tr", "search_books_by_wauth.json"
+          @results = @search.books_by_author("Dan Brown", {:qsort => 'tr'})
+        end
+
+        should "return success" do
+          @results.message.should eql("Success")
+          @results.status.should eql("0")
+        end
+        should "return atleast one work" do
+          @results.work.size.should >= 1
+        end
+        should "not return more than #{@default_chunk} works" do
+          @results.work.size.should_not > @default_chunk
+        end
+        should "include the parameter in the basic" do
+          @results.work.first.author.should include("Dan", "Brown")
+        end
+      end
       end
       context "by title" do
         setup do
@@ -287,24 +329,26 @@ class TestAlibrisSearch < Test::Unit::TestCase
         end
       end
       context "by topic: " do
-        setup do
-          @topic = "photography"
-          stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wtopic=photography", "search_books_by_wtopic.json"
-          @results = @search.books_by_topic(@topic)
-        end
+        context "sorted by rating/price (default)" do
+          setup do
+            @topic = "photography"
+            stub_get "http://api.alibris.com/v1/public/search/?outputtype=json&apikey=#{API_KEY}&mtype=B&wtopic=photography", "search_books_by_wtopic.json"
+            @results = @search.books_by_topic(@topic)
+          end
 
-        should "return success" do
-          @results.message.should eql("Success")
-          @results.status.should eql("0")
-        end
-        should "return atleast one work" do
-          @results.work.size.should >= 1
-        end
-        should "not return more than #{@default_chunk} works" do
-          @results.work.size.should_not > @default_chunk
-        end
-        should "include the parameter in the basic" do
-          @results.work.first.basic.downcase.should include(@topic.downcase)
+          should "return success" do
+            @results.message.should eql("Success")
+            @results.status.should eql("0")
+          end
+          should "return atleast one work" do
+            @results.work.size.should >= 1
+          end
+          should "not return more than #{@default_chunk} works" do
+            @results.work.size.should_not > @default_chunk
+          end
+          should "include the parameter in the basic" do
+            @results.work.first.basic.downcase.should include(@topic.downcase)
+          end
         end
       end
    end
