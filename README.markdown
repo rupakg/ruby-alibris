@@ -10,6 +10,7 @@ and used books, music, and movies, as well as rare and collectible titles.
 ## Features
 
 The [Alibris](http://developer.alibris.com/) API consists of three main features, namely:
+
 * [Search method](http://developer.alibris.com/docs/read/Search_Method)
 * [Recommendations method](http://developer.alibris.com/docs/read/Recommendations_Method)
 * [Reviews method](http://developer.alibris.com/docs/read/Reviews_API)
@@ -66,6 +67,7 @@ Let's see some examples, for searching books:
 The Search object adds some functionality by taking values passed via options, as follows:
 
 a) sorting options: {:qsort => value}, which can be,
+
 * r = rating/price (books searches only), default
 * t = title, tr = title reverse
 * a = author, ar = author reverse
@@ -121,8 +123,10 @@ for books to music and videos as well.
 ## Roadmap
 
 1. Implement the other methods from Alibris API:
+
 * Recommendations method
 * Reviews method
+
 2. Update the wrapper library to work with output type 'xml'. Currently, only 'json' is supported.
 
 ## Note on Patches/Pull Requests
