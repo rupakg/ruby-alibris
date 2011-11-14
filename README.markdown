@@ -140,6 +140,10 @@ for books to music and videos as well.
   bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+## Awards
+
+ruby-alibris, a Ruby wrapper for the Alibris API, won the ["Most Developer Friendly Code" Award](http://rails.webintellix.com/2011/07/06/ruby-alibris-wrapper-wins-most-developer-friendly-code-award/), in the First Annual Alibris API Programming Contest.
+
 ## Copyright
 
 Copyright (c) 2011 [Rupak Ganguly](http://rails.webintellix.com). See LICENSE for details.
