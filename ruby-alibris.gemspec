@@ -21,6 +21,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency(%q<hashie>, ["~> 1.0.0"])
   s.add_runtime_dependency(%q<httparty>, ["~> 0.7.0"])
+  
+  s.add_development_dependency(%q<bundler>, ["~> 1.0"])
+  s.add_development_dependency(%q<rake>, ["~> 0.8"])
   s.add_development_dependency(%q<shoulda>, [">= 2.10.1"])
   s.add_development_dependency(%q<jnunemaker-matchy>, ["= 0.4.0"])
   s.add_development_dependency(%q<mocha>, ["~> 0.9.12"])
