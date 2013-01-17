@@ -3,7 +3,8 @@
 Wrapper for the [Alibris](http://developer.alibris.com/) API, the premier online marketplace for independent sellers of new
 and used books, music, and movies, as well as rare and collectible titles.
 
-Travis CI: [![Build Status](http://travis-ci.org/rupakg/ruby-alibris.png)](http://travis-ci.org/rupakg/ruby-alibris)
+[![Build Status](https://travis-ci.org/rupakg/ruby-alibris.png)](https://travis-ci.org/rupakg/ruby-alibris)
+[![Gem Version](https://badge.fury.io/rb/ruby-alibris.png)](http://badge.fury.io/rb/ruby-alibris)
 
 ## Installation
 
