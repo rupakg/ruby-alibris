@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>ruby-alibris by rupakg</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>ruby-alibris</h1>
+          <h2>A Ruby wrapper for Alibris API.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/rupakg/ruby-alibris/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/rupakg/ruby-alibris/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/rupakg/ruby-alibris" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>ruby-alibris</h1>
+
+<p>Wrapper for the <a href="http://developer.alibris.com/">Alibris</a> API, the premier online marketplace for independent sellers of new and used books, music, and movies, as well as rare and collectible titles.</p>
+
+<h2>Installation</h2>
+
+<pre><code>gem install ruby-alibris
+</code></pre>
+
+<h2>Features</h2>
+
+<p>The <a href="http://developer.alibris.com/">Alibris</a> API consists of three main features, namely:</p>
+
+<ul>
+<li><a href="http://developer.alibris.com/docs/read/Search_Method">Search method</a></li>
+<li><a href="http://developer.alibris.com/docs/read/Recommendations_Method">Recommendations method</a></li>
+<li><a href="http://developer.alibris.com/docs/read/Reviews_API">Reviews method</a></li>
+</ul><p>This wrapper library provides access to that functionality in an easy and intuitive manner.</p>
+
+<h3>The Search method</h3>
+
+<p>The Search object wraps up the <a href="http://developer.alibris.com/docs/read/Search_Method">Search method</a> of the Alibris API. The results that are returned are called 'works' in Alibris' terminology. The 'works' are of types books, music and videos. The Search object can search across all types of works or specifically against books, music or videos. The search object provides convenient helper methods for other operations like search by author, by title and by topic.</p>
+
+<p>You can find more about the <a href="http://developer.alibris.com/docs/read/Search_Method">Search method</a> at Alibris' site.</p>
+
+<h3>Usage</h3>
+
+<p>The Search object can be instantiated by providing the Alibris API key, and optionally the output type and the number of results that the search should return. The allowed output types are xml and json, xml being the default, while the default number of results returned is 25.</p>
+
+<p>Require the wrapper library:</p>
+
+<pre><code>require 'alibris'
+</code></pre>
+
+<p>For example, to create a Search object with output type set to 'json', and limit number of results returned to the default value of 25, do:</p>
+
+<pre><code>s = Alibris::Search.new(:api_key =&gt; "your_alibris_api_key_here", :output_type =&gt; "json")
+</code></pre>
+
+<p>And, to create a Search object with output type set to 'json' and limit number of results returned to 10, do:</p>
+
+<pre><code>s = Alibris::Search.new(:api_key =&gt; "your_alibris_api_key_here", :output_type =&gt; "json", :num_results =&gt; 10)
+</code></pre>
+
+<p>Let's see some examples, for searching books:</p>
+
+<pre><code># search for books by search term
+results = s.books("photography")
+results.work.first.title    # =&gt; "Making Movies"
+results.work.first.author   # =&gt; "Lumet, Sidney"
+
+# search for books by author
+results = s.books_by_author("Dan Brown")
+results.work.first.title    # =&gt; "The Lost Symbol"
+
+# search for books by title
+results = s.books_by_title("The Fountainhead")
+results.work.first.author   # =&gt; "Rand, Ayn"
+
+# search for books by topic
+results = s.books_by_topic("Religion")
+results.work.last.author   # =&gt; "Hardwick, Susan"
+results.work.last.title    # =&gt; "God of freedom"
+</code></pre>
+
+<p>The Search object adds some functionality by taking values passed via options, as follows:</p>
+
+<p>a) sorting options: {:qsort =&gt; value}, which can be,</p>
+
+<ul>
+<li>r = rating/price (books searches only), default</li>
+<li>t = title, tr = title reverse</li>
+<li>a = author, ar = author reverse</li>
+<li>p = price, pr = price reverse</li>
+<li>d = date (year), dr = date reverse</li>
+</ul><p>b) number of results returned: {:chunk =&gt; integer}</p>
+
+<p>c) number of results to skip: {:skip =&gt; integer}</p>
+
+<p>And, some more examples using options as described above:</p>
+
+<pre><code># search for books by author and sorted by title
+results = s.books_by_author("Dan Brown", {:qsort =&gt; 't'})
+results.work.last.author   # =&gt; "Brown, Dan, and Spence, Cathryn"
+results.work.last.title    # =&gt; "Bath: City on Show"
+
+# search for books by author and sorted by title in reverse
+results = s.books_by_author("Dan Brown", {:qsort =&gt; 'tr'})
+results.work.last.author   # =&gt; "Brown, Dan"
+results.work.last.title    # =&gt; "The Da Vinci Code: Illustrated Screenplay"
+
+# search for books by author and sorted by title, with only 10 results returned
+results = s.books_by_author("Dan Brown", {:qsort =&gt; 't', :chunk =&gt; 10})
+results.work.last.author   # =&gt; "Birlew, Dan, and Brown, Damon"
+results.work.last.title    # =&gt; "Resident Evil 4"
+</code></pre>
+
+<p>Similarly, some examples, for searching music:</p>
+
+<pre><code># search for music by search term
+results = s.music("rock")
+results.work.first.title    # =&gt; "Live at the Troubadour"
+results.work.first.author   # =&gt; "Carole King &amp; James Taylor"
+
+# search for music by author
+results = s.music_by_author("The Beatles")
+results.work.last.title    # =&gt; "With the Beatles"
+</code></pre>
+
+<p>Similarly, some examples, for searching videos:</p>
+
+<pre><code># search for videos by search term
+results = s.videos("kids")
+results.work.first.title    # =&gt; "The Kids Are All Right"
+results.work.first.author   # =&gt; "Lisa Cholodenko"
+
+# search for videos by author
+results = s.videos_by_author("Lisa Cholodenko")
+results.work.last.title    # =&gt; "Laurel Canyon"
+</code></pre>
+
+<p><em>Note</em>: You can apply the options for sorting, number of results returned and number of results skipped as described for books to music and videos as well.</p>
+
+<h2>Roadmap</h2>
+
+<ol>
+<li>Implement the other methods from Alibris API:</li>
+</ol><ul>
+<li>Recommendations method</li>
+<li>Reviews method</li>
+</ul><ol>
+<li>Update the wrapper library to work with output type 'xml'. Currently, only 'json' is supported.</li>
+</ol><h2>Note on Patches/Pull Requests</h2>
+
+<ul>
+<li>Fork the project.</li>
+<li>Make your feature addition or bug fix.</li>
+<li>Add tests for it. This is important so I don't break it in a future version unintentionally.</li>
+<li>Commit, do not mess with rakefile, version, or history. (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)</li>
+<li>Send me a pull request. Bonus points for topic branches.</li>
+</ul><h2>Awards</h2>
+
+<p>ruby-alibris, a Ruby wrapper for the Alibris API, won the <a href="http://rails.webintellix.com/2011/07/06/ruby-alibris-wrapper-wins-most-developer-friendly-code-award/">"Most Developer Friendly Code" Award</a>, in the First Annual Alibris API Programming Contest.</p>
+
+<h2>Copyright</h2>
+
+<p>Copyright (c) 2013 <a href="http://rails.webintellix.com">Rupak Ganguly</a>. See LICENSE for details.</p>
+        </section>
+
+        <footer>
+          ruby-alibris is maintained by <a href="https://github.com/rupakg">rupakg</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
