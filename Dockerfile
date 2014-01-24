@@ -10,7 +10,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt
 RUN apt-get update
 
 # install git
-RUN apt-get install git
+RUN apt-get install -y git
 
 # get the code for ruby-alibris lib from github
 RUN git clone https://github.com/rupakg/ruby-alibris.git
